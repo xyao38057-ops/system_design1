@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>DriverLab · 智能驾驶集成系统</title><link rel="stylesheet" href="/style.css"></head>
+<body>
+<aside class="sidebar">
+  <a class="brand" href="/"><span class="brand-icon">D</span><span>DriverLab<small>智能驾驶集成系统</small></span></a>
+  <div class="nav-label">WORKSPACE / 工作台</div>
+  <nav aria-label="主导航">
+    <button class="nav active" data-tab="overview"><span>◫</span>驾驶总览</button>
+    <button class="nav" data-tab="routes"><span>⑂</span>路径推荐</button>
+    <button class="nav" data-tab="behavior"><span>◎</span>用户行为</button>
+    <button class="nav" data-tab="records"><span>≡</span>实验记录</button>
+  </nav>
+  <div class="sidebar-bottom"><span class="pill">COURSE PROJECT</span><p>从观测到决策<br>让每一次响应都有依据。</p><small>内置二维仿真 · 非真实车辆控制<br>SUMO 场景可独立导出</small></div>
+</aside>
+<main>
+  <header><div class="breadcrumb">系统分析与设计 <span>/</span> <b id="page-title">驾驶总览</b></div><div class="connection"><i id="connection-dot"></i><span id="connection-text">正在连接</span><span class="avatar">DL</span></div></header>
+  <div class="content">
+    <section class="page-heading"><div><div class="eyebrow">INTELLIGENT DRIVING WORKSPACE</div><h1 id="headline">每一次决策，都看得见。</h1><p id="subtitle">监测道路变化，理解驾驶偏好，在可重复的场景中验证响应。</p></div><a class="button ghost" href="/api/export">↓ 导出决策日志</a></section>
+    <div id="error-banner" role="alert" hidden></div>
+    <section class="tab active" id="tab-overview">
+      <div class="metrics">
+        <article class="metric"><span>当前车速</span><div><b id="speed">0.0</b><small>km/h</small></div><em id="acceleration">加速度 0.0 m/s²</em></article>
+        <article class="metric"><span>剩余路程</span><div><b id="distance">—</b><small>m</small></div><em id="eta">预计自由通行时间 —</em></article>
+        <article class="metric"><span>前车净间距</span><div><b id="gap">—</b><small>m</small></div><em id="ttc">当前无前方障碍</em></article>
+        <article class="metric"><span>自动响应状态</span><div><b id="status" class="status-text">待启动</b></div><em id="sim-time">仿真时间 0.0 s</em></article>
+      </div>
+      <div class="workspace-grid">
+        <article class="card map-card"><div class="card-heading"><div><h2>道路与车辆监控</h2><p>校园 → 科技园 · 示意路网 · 双车道</p></div><span class="badge blue">2D SIMULATION</span></div>
+          <div class="map-wrap"><canvas id="road-map" aria-label="二维路网和车辆位置"></canvas><div class="map-overlay"><i class="dot cyan"></i><span id="scenario-name">正常导航</span></div><div class="map-legend"><span><i class="line cyan"></i>推荐路线</span><span><i class="line amber"></i>拥堵</span><span><i class="line red"></i>封闭</span></div></div>
+          <div class="map-toolbar"><div><button id="toggle-run" class="button primary">▶ 开始仿真</button><button id="reset" class="button ghost">↺ 重置</button></div><div class="speed-controls" aria-label="仿真倍速"><button data-speed="1" class="selected">1×</button><button data-speed="2">2×</button><button data-speed="4">4×</button></div></div>
+        </article>
+        <article class="card scenarios-card"><div class="card-heading"><div><h2>场景实验室</h2><p>点击场景会重置并自动开始</p></div><span class="badge">07</span></div><div class="scenario-list">
+          <button data-scenario="normal"><span class="scenario-icon">↗</span><span><b>正常导航</b><small>完整行程与路线跟踪</small></span><em>01</em></button>
+          <button data-scenario="congestion"><span class="scenario-icon amber-bg">≈</span><span><b>中央街拥堵</b><small>更新路段代价，重新推荐</small></span><em>02</em></button>
+          <button data-scenario="closure"><span class="scenario-icon red-bg">⊘</span><span><b>道路封闭</b><small>排除封闭路段并绕行</small></span><em>03</em></button>
+          <button data-scenario="brake"><span class="scenario-icon red-bg">!</span><span><b>前车急停 · 侧方占用</b><small>拒绝换道，执行制动</small></span><em>04</em></button>
+          <button data-scenario="avoid"><span class="scenario-icon">⑂</span><span><b>前方障碍 · 可换道</b><small>减速并转入相邻车道</small></span><em>05</em></button>
+          <button data-scenario="sensor"><span class="scenario-icon amber-bg">⌁</span><span><b>测距传感器中断</b><small>观测超时后降级停车</small></span><em>06</em></button>
+          <button data-scenario="no_route"><span class="scenario-icon">×</span><span><b>全部出口封闭</b><small>无可行路线的异常处理</small></span><em>07</em></button>
+        </div></article>
+      </div>
+      <div class="lower-grid">
+        <article class="card"><div class="card-heading"><div><h2>车载传感器</h2><p>模拟观测 · 统一仿真时钟</p></div><span class="badge" id="sensor-count">3 / 3</span></div><div class="sensor-list"><div><span class="sensor-symbol">⌖</span><span><b>定位传感器</b><small id="gps-value">—</small></span><em class="online">在线</em></div><div><span class="sensor-symbol">◴</span><span><b>车速传感器</b><small id="speed-value">—</small></span><em class="online">在线</em></div><div><span class="sensor-symbol">⌁</span><span><b>前向测距</b><small id="sensor-age">最近更新 0.0 s</small></span><button id="sensor-toggle" class="text-button">断开</button></div></div></article>
+        <article class="card"><div class="card-heading"><div><h2>速度曲线</h2><p>最近 24 仿真秒 · km/h</p></div><span class="badge blue">TELEMETRY</span></div><svg id="speed-chart" viewBox="0 0 440 150" role="img" aria-label="速度变化曲线"></svg><div class="chart-footer"><span>减速峰值 <b id="max-decel">0</b> m/s²</span><span>碰撞 <b id="collision">0</b></span></div></article>
+        <article class="card decision-card"><div class="card-heading"><div><h2>当前决策依据</h2><p>规则版本 FSM-1.0</p></div><span class="pulse-dot"></span></div><div class="decision-body"><strong id="decision-title">等待启动</strong><p id="decision-reason">选择场景开始实验。</p><div class="notice">这是教学用简化状态机。换道场景采用预设侧方空间，未验证真实车辆动力学。</div></div></article>
+      </div>
+      <article class="card road-table"><div class="card-heading"><div><h2>路况事件控制</h2><p>手动注入事件，观察路线与响应变化</p></div><span class="badge">示意路网</span></div><div class="table-scroll"><table><thead><tr><th>路段</th><th>长度</th><th>设定平均速度</th><th>路况</th><th>事件注入</th></tr></thead><tbody id="road-rows"></tbody></table></div></article>
+    </section>
+    <section class="tab" id="tab-routes"><div class="info-strip">候选路线均从校园起点 A 至科技园终点 D 计算；驾驶总览中的路线为当前车辆剩余路线。</div><div id="route-cards" class="route-cards"></div><article class="card explanation"><h2>可解释的加权寻路</h2><p>使用 Dijkstra 算法。代价 = 时间权重 × 通行秒数 / 100 + 距离权重 × 米数 / 1000 + 舒适权重 × 路段复杂度 × 米数 / 1000。</p><p>封闭路段不参与搜索。拥堵使通行时间增大。车辆已进入的路段保留，后续路线从下一个路口重新规划；当前路段封闭时停车等待。</p><p>预计时间是路段通行时间之和，不包含起步、制动及停车等待。权重和复杂度均为课程设定参数。</p></article></section>
+    <section class="tab" id="tab-behavior"><div class="info-strip">用户画像来自明确标记的模拟人工驾驶记录，与本次自动驾驶的控制日志分开；没有训练机器学习模型。</div><article class="card explanation"><div class="card-heading"><div><h2>驾驶行为分析</h2><p>固定种子 · 120 秒样本 · 可重复比较</p></div><select id="behavior-select" aria-label="驾驶行为样本"><option value="steady">平稳驾驶样本</option><option value="active">频繁加减速样本</option><option value="cautious">谨慎驾驶样本</option></select></div><div id="behavior-metrics" class="behavior-metrics"></div><div id="behavior-result" class="behavior-result"></div><p id="behavior-rule"></p><p>画像只提供提示，不放宽碰撞约束；导航偏好由用户在“路径推荐”页显式选择。</p></article></section>
+    <section class="tab" id="tab-records"><div class="record-grid"><article class="card"><div class="card-heading"><div><h2>当前实验事件流</h2><p>保留最新 100 条，完整事件写入 SQLite</p></div><span id="run-id" class="badge"></span></div><div id="event-list" class="event-list"></div></article><article class="card"><div class="card-heading"><div><h2>历史实验</h2><p>最近 50 次运行摘要，非完整轨迹回放</p></div><button id="refresh-runs" class="text-button">刷新</button></div><div id="run-list" class="run-list"></div></article></div></section>
+    <footer><span>DriverLab / 系统分析与设计课程原型</span><span>本地运行 · 内置二维引擎 · 数据单位已统一</span></footer>
+  </div>
+</main><div id="toast" role="status" hidden></div><script src="/app.js"></script>
+</body></html>
